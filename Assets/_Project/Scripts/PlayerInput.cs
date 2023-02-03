@@ -71,12 +71,16 @@ public class PlayerInput : MonoBehaviour
                 //input = Quaternion.Inverse(_instance._originalRotation) * input;
                 //float forward = Vector3.Project(input, Vector3.forward);
                 //input = Quaternion.Inverse(_instance._originalRotation) * input;
-                Vector3 newForward = _instance._gyro.attitude * (Quaternion.Inverse(_instance._originalRotation) * Vector3.forward);
-                newForward = Quaternion.Inverse(_instance._originalRotation) * newForward;
-                float sin = Mathf.Sin(_instance._originalAngle);
-                float cos = Mathf.Cos(_instance._originalAngle);
+                //Vector3 newForward = _instance._gyro.attitude * (Quaternion.Inverse(_instance._originalRotation) * Vector3.forward);
+                //newForward = Quaternion.Inverse(_instance._originalRotation) * newForward;
+                //float sin = Mathf.Sin(_instance._originalAngle);
+                //float cos = Mathf.Cos(_instance._originalAngle);
                 
-                return new Vector2(cos * newForward.x - sin * newForward.y, sin * newForward.x + cos * newForward.y);
+                //return new Vector2(cos * newForward.x - sin * newForward.y, sin * newForward.x + cos * newForward.y);
+                
+                Quaternion localRot = Quaternion.Inverse(_instance._originalRotation) * Input.gyro.attitude;
+                Vector3 newForward = localRot * Vector3.forward;
+                return new Vector2(newForward.x, newForward.y);
             }
         }
         return Vector2.zero;

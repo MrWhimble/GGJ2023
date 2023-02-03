@@ -8,6 +8,7 @@ public class GryoSim : MonoBehaviour
 
     private Quaternion originalRot;
     private Vector3 originalForward;
+    private float originalAngle;
 
     private void Start()
     {
@@ -18,9 +19,11 @@ public class GryoSim : MonoBehaviour
     private void Update()
     {
         Quaternion newRot = transform.rotation;
+        newRot = Quaternion.Inverse(originalRot) * newRot;
         Vector3 newForward = newRot * Vector3.forward;
 
-        newForward = Quaternion.Inverse(originalRot) * newForward;
+        //newForward = Quaternion.Inverse(originalRot) * newForward;
+        
         
 
         //newUp = Quaternion.Inverse(originalRot) * newUp;
