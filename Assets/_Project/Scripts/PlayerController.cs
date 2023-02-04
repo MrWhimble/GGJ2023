@@ -5,8 +5,12 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float speed;
+    [SerializeField] private float upgradedSpeed;
     [SerializeField] private float slowSpeed;
+    [SerializeField] private float upgradedSlowSpeed;
 
+    private bool _spedUp;
+    
     private Rigidbody2D _rigidbody;
     private Camera _camera;
 
@@ -21,6 +25,12 @@ public class PlayerController : MonoBehaviour
         _camera = Camera.main;
         _topLeft = _camera.ScreenToWorldPoint(new Vector3(0, 0, 0));
         _bottomRight = _camera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height));
+        _spedUp = false;
+    }
+
+    public void UpgradeSpeed()
+    {
+        _spedUp = true;
     }
 
     private void Update()
@@ -35,7 +45,8 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         Vector2 currentPos = _rigidbody.position;
-        Vector2 newPos = currentPos + (_inputDir * speed * Time.fixedDeltaTime);
+        float s = _spedUp ? upgradedSpeed : speed;
+        Vector2 newPos = currentPos + (_inputDir * s * Time.fixedDeltaTime);
         
         newPos = new Vector2(Mathf.Clamp(newPos.x, _topLeft.x, _bottomRight.x), Mathf.Clamp(newPos.y, _topLeft.y, _bottomRight.y));
         
