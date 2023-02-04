@@ -14,9 +14,21 @@ public class CameraController : MonoBehaviour
 
     private Camera _camera;
 
+    private Vector2 _topLeft;
+    public Vector2 TopLeft => _topLeft;
+
+    private Vector2 _bottomRight;
+    public Vector2 BottomRight => _bottomRight;
+
     private void Awake()
     {
         _camera = GetComponent<Camera>();
+        UpdateCorners();
+    }
+
+    private void Start()
+    {
+        
     }
 
     private void Update()
@@ -34,6 +46,14 @@ public class CameraController : MonoBehaviour
             _camera.orthographicSize = endSize;
             _transitioning = false;
         }
+
+        UpdateCorners();
+    }
+
+    private void UpdateCorners()
+    {
+        _topLeft = _camera.ScreenToWorldPoint(new Vector3(0, 0, 0));
+        _bottomRight = _camera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height));
     }
 
     public void ZoomIn()
@@ -51,10 +71,12 @@ public class CameraController : MonoBehaviour
     public void InstantZoomIn()
     {
         _camera.orthographicSize = zoomedInSize;
+        UpdateCorners();
     }
 
     public void InstantZoomOut()
     {
         _camera.orthographicSize = zoomedOutSize;
+        UpdateCorners();
     }
 }

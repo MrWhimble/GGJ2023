@@ -18,7 +18,7 @@ MonoBehaviour:
   deltaTime: 0.25
   lifeTime: 3
   directions:
-  - position: {x: 0.4, y: -0.8}
+  - position: {x: 0.6, y: -1.5}
     angle: 180
-  - position: {x: -0.4, y: -0.8}
+  - position: {x: -0.6, y: -1.5}
     angle: 180

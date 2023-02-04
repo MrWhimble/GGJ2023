@@ -15,6 +15,7 @@ public class PlayerInput : MonoBehaviour
     
     [SerializeField] private InputTypes inputType;
     [SerializeField] private bool useMouseAsFollow = false;
+    [SerializeField] private Vector2 followOffset;
     private Gyroscope _gyro;
 
     private Camera _camera;
@@ -139,16 +140,17 @@ public class PlayerInput : MonoBehaviour
                 return;
             }
 
-            _followPos = _camera.ScreenToWorldPoint(screenPos);
+            _followPos = (Vector3)followOffset + _camera.ScreenToWorldPoint(screenPos);
             
         }
     }
 
+    /*
     private void OnGUI()
     {
         GUI.Label(new Rect(20, 20, 1000, 20), $"{_gyro.enabled}");
         GUI.Label(new Rect(20, 50, 1000, 20), $"{_gyro.attitude.eulerAngles}");
         GUI.Label(new Rect(20, 80, 1000, 20), $"{_gyro.gravity}");
         GUI.Label(new Rect(20, 110, 1000, 20), $"{Input.acceleration}");
-    }
+    }*/
 }

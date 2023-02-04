@@ -28,7 +28,7 @@ public class CameraControllerEditor : Editor
             cc.InstantZoomIn();
         }
 
-        if (GUILayout.Button("Instantly Zoom In"))
+        if (GUILayout.Button("Instantly Zoom Out"))
         {
             cc.InstantZoomOut();
         }
