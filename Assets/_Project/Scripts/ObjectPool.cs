@@ -17,7 +17,6 @@ public class ObjectPool<T> where T : PooledBehaviour
             obj.name = $"{_prefab.GetType()} ({i})";
             obj.gameObject.SetActive(false);
             _objects.Add(obj);
-            Debug.Log(i);
         }
     }
 

@@ -2,6 +2,9 @@
 
 public class BulletManager : MonoBehaviour
 {
+    [SerializeField] private WeaponData[] weapons;
+    public int weaponIndex;
+    
     [SerializeField] private BulletController prefab;
     [SerializeField] private Transform origin;
     
@@ -17,12 +20,12 @@ public class BulletManager : MonoBehaviour
 
     private void Start()
     {
-        Shoot();
+        
     }
 
     private void Update()
     {
-        if (PlayerInput.IsShooting() && Time.time > _lastShotTime + 1f)
+        if (PlayerInput.IsShooting() && Time.time > _lastShotTime + weapons[weaponIndex].deltaTime)
         {
             Shoot();
         }
@@ -30,9 +33,12 @@ public class BulletManager : MonoBehaviour
 
     public void Shoot()
     {
-        BulletController bc = _bullets.Spawn();
-        bc.Init(((Vector2)origin.position) + new Vector2(1, 1), 45, 1);
-
+        var data = weapons[weaponIndex];
+        for (int i = 0; i < data.directions.Length; i++)
+        {
+            BulletController bc = _bullets.Spawn();
+            bc.Init(data, i, origin.position);
+        }
         _lastShotTime = Time.time;
     }
 }

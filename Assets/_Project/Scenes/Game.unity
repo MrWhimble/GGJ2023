@@ -152,6 +152,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0597a16aca984e3eab8d34ec1e6a1e40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weapons:
+  - {fileID: 11400000, guid: 01f78269b9769a2488da5033d7f5542a, type: 2}
+  - {fileID: 11400000, guid: 4ef5b00e950a63f48a43a1646276ae63, type: 2}
+  - {fileID: 11400000, guid: 333096eb7c073ac4788c23425fe85131, type: 2}
+  weaponIndex: 0
   prefab: {fileID: 8693472680681748738, guid: b5e7a6841b8de0749ac3cd60c7b22ce8, type: 3}
   origin: {fileID: 1315477603}
 --- !u!4 &394947895
@@ -333,7 +338,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputType: 2
-  useMouseAsFollow: 0
+  useMouseAsFollow: 1
 --- !u!4 &1000236228
 Transform:
   m_ObjectHideFlags: 0
