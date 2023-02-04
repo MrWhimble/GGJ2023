@@ -21,6 +21,10 @@ public class GryoSim : MonoBehaviour
         Quaternion newRot = transform.rotation;
         newRot = Quaternion.Inverse(originalRot) * newRot;
         Vector3 newForward = newRot * Vector3.forward;
+        Vector3 newRight = newRot * Vector3.right;
+        
+        Debug.DrawRay(Vector3.zero, newForward, Color.green);
+        //Debug.DrawRay(Vector3.zero, newRight, Color.red);
 
         //newForward = Quaternion.Inverse(originalRot) * newForward;
         
@@ -31,6 +35,6 @@ public class GryoSim : MonoBehaviour
         //Vector3 input = Vector3.ProjectOnPlane(newUp, Vector3.up);
         //Debug.Log(newUp);
         
-        mover.Translate(new Vector3(-newForward.x * speed * Time.deltaTime, -newForward.y * speed * Time.deltaTime, 0));
+        mover.Translate(new Vector3(newForward.x * speed * Time.deltaTime, newForward.y * speed * Time.deltaTime, 0));
     }
 }
