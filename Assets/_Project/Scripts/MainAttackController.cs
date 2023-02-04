@@ -90,6 +90,7 @@ public class MainAttackController : MonoBehaviour
 
         yield return new WaitForSeconds(4f);
         
+        rootObjects[0].gameObject.SetActive(true);
         float delta = Time.fixedDeltaTime * 50f;
         for (float y = 0f; y < 21f; y += delta)
         {
@@ -107,7 +108,7 @@ public class MainAttackController : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
         obj.localPosition = new Vector2(0, 0);
-        
+        rootObjects[0].gameObject.SetActive(false);
         
         AttackFinished();
         yield break;

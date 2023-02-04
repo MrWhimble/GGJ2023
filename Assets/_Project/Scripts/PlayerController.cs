@@ -41,9 +41,9 @@ public class PlayerController : MonoBehaviour
         float s = _spedUp ? upgradedSpeed : speed;
         Vector2 newPos = currentPos + (_inputDir * s * Time.fixedDeltaTime);
         
-        newPos = new Vector2(Mathf.Clamp(newPos.x, _cameraController.TopLeft.x, _cameraController.BottomRight.x), Mathf.Clamp(newPos.y, _cameraController.TopLeft.y, _cameraController.BottomRight.y));
+        //newPos = new Vector2(Mathf.Clamp(newPos.x, _cameraController.TopLeft.x, _cameraController.BottomRight.x), Mathf.Clamp(newPos.y, _cameraController.TopLeft.y, _cameraController.BottomRight.y));
         
-        _rigidbody.MovePosition(newPos);
+        //_rigidbody.MovePosition(newPos);
     }
     
 }
