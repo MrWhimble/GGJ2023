@@ -33,9 +33,12 @@ public class BulletManager : MonoBehaviour
 
     public void Shoot()
     {
-        BulletController bc = _bullets.Spawn();
-        bc.Init(((Vector2)origin.position) + new Vector2(0, -1), 180, 12);
-
+        var data = weapons[weaponIndex];
+        for (int i = 0; i < data.directions.Length; i++)
+        {
+            BulletController bc = _bullets.Spawn();
+            bc.Init(data, i, origin.position);
+        }
         _lastShotTime = Time.time;
     }
 }
