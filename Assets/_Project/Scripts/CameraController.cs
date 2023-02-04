@@ -14,11 +14,11 @@ public class CameraController : MonoBehaviour
 
     private Camera _camera;
 
-    private Vector2 _topLeft;
-    public Vector2 TopLeft => _topLeft;
+    private Vector2 _bottomLeft;
+    public Vector2 BottomLeft => _bottomLeft;
 
-    private Vector2 _bottomRight;
-    public Vector2 BottomRight => _bottomRight;
+    private Vector2 _TopRight;
+    public Vector2 TopRight => _TopRight;
 
     private void Awake()
     {
@@ -52,8 +52,8 @@ public class CameraController : MonoBehaviour
 
     private void UpdateCorners()
     {
-        _topLeft = _camera.ScreenToWorldPoint(new Vector3(0, 0, 0));
-        _bottomRight = _camera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height));
+        _bottomLeft = _camera.ScreenToWorldPoint(new Vector3(0, 0, 0));
+        _TopRight = _camera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height));
     }
 
     public void ZoomIn()
