@@ -21,8 +21,6 @@ public class PlayerInput : MonoBehaviour
 
 
     private Quaternion _originalRotation;
-    private Vector3 _originalForward;
-    private float _originalAngle;
     private bool _noTouchesLastFrame;
     private int _touchId;
     private bool _following;
@@ -42,11 +40,6 @@ public class PlayerInput : MonoBehaviour
         _gyro = Input.gyro;
         _gyro.enabled = true;
         _originalRotation = _gyro.attitude;
-        _originalForward = _originalRotation * Vector3.up;
-        _originalForward.y = 0;
-        _originalAngle = Vector3.SignedAngle(_originalForward, Vector3.up, Vector3.forward);
-        Debug.Log(_originalAngle);
-        _originalAngle *= Mathf.Deg2Rad;
     }
 
     public static Vector2 GetMoveDirection(Vector2 currentPosition)
@@ -66,24 +59,37 @@ public class PlayerInput : MonoBehaviour
             }
             case InputTypes.Gyro:
             {
-                //Vector3 currentUp = _instance._gyro.attitude * Vector3.up;
-                //Vector3 input = Vector3.ProjectOnPlane(currentUp, _instance._originalUp);
-                //input = Quaternion.Inverse(_instance._originalRotation) * input;
-                //float forward = Vector3.Project(input, Vector3.forward);
-                //input = Quaternion.Inverse(_instance._originalRotation) * input;
-                //Vector3 newForward = _instance._gyro.attitude * (Quaternion.Inverse(_instance._originalRotation) * Vector3.forward);
-                //newForward = Quaternion.Inverse(_instance._originalRotation) * newForward;
-                //float sin = Mathf.Sin(_instance._originalAngle);
-                //float cos = Mathf.Cos(_instance._originalAngle);
-                
-                //return new Vector2(cos * newForward.x - sin * newForward.y, sin * newForward.x + cos * newForward.y);
-                
                 Quaternion localRot = Quaternion.Inverse(_instance._originalRotation) * Input.gyro.attitude;
-                Vector3 newForward = localRot * Vector3.forward;
-                return new Vector2(newForward.x, newForward.y);
+                Vector3 forward = localRot * Vector3.forward;
+                return new Vector2(forward.x, forward.y);
             }
         }
         return Vector2.zero;
+    }
+
+    public static bool IsShooting()
+    {
+        bool isInDefenceMode = false;
+        if (isInDefenceMode)
+            return false;
+        
+        switch (_instance.inputType)
+        {
+            case InputTypes.Keyboard:
+            {
+                return true;
+            }
+            case InputTypes.Follow:
+            {
+                return _instance._following;
+            }
+            case InputTypes.Gyro:
+            {
+                return true;
+            }
+        }
+
+        return true;
     }
 
     private void Update()
