@@ -21,8 +21,6 @@ public class PlayerInput : MonoBehaviour
 
 
     private Quaternion _originalRotation;
-    private Vector3 _originalForward;
-    private float _originalAngle;
     private bool _noTouchesLastFrame;
     private int _touchId;
     private bool _following;
@@ -42,11 +40,6 @@ public class PlayerInput : MonoBehaviour
         _gyro = Input.gyro;
         _gyro.enabled = true;
         _originalRotation = _gyro.attitude;
-        _originalForward = _originalRotation * Vector3.up;
-        _originalForward.y = 0;
-        _originalAngle = Vector3.SignedAngle(_originalForward, Vector3.up, Vector3.forward);
-        Debug.Log(_originalAngle);
-        _originalAngle *= Mathf.Deg2Rad;
     }
 
     public static Vector2 GetMoveDirection(Vector2 currentPosition)
@@ -72,6 +65,31 @@ public class PlayerInput : MonoBehaviour
             }
         }
         return Vector2.zero;
+    }
+
+    public static bool IsShooting()
+    {
+        bool isInDefenceMode = false;
+        if (isInDefenceMode)
+            return false;
+        
+        switch (_instance.inputType)
+        {
+            case InputTypes.Keyboard:
+            {
+                return true;
+            }
+            case InputTypes.Follow:
+            {
+                return _instance._following;
+            }
+            case InputTypes.Gyro:
+            {
+                return true;
+            }
+        }
+
+        return true;
     }
 
     private void Update()

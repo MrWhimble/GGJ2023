@@ -10,10 +10,14 @@ public class ObjectPool<T> where T : PooledBehaviour
     public void Init(T prefab, int count)
     {
         _prefab = prefab;
+        _objects = new List<T>();
         for (int i = 0; i < count; i++)
         {
             T obj = Object.Instantiate(_prefab);
+            obj.name = $"{_prefab.GetType()} ({i})";
             obj.gameObject.SetActive(false);
+            _objects.Add(obj);
+            Debug.Log(i);
         }
     }
 
@@ -30,6 +34,7 @@ public class ObjectPool<T> where T : PooledBehaviour
         }
         
         T obj = Object.Instantiate(_prefab);
+        obj.name = $"{_prefab.GetType()} ({objCount})";
         _objects.Add(obj);
         obj.Spawn();
         return obj;
