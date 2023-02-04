@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MainAttackController : MonoBehaviour
 {
@@ -10,7 +12,43 @@ public class MainAttackController : MonoBehaviour
 
     [SerializeField] private Transform[] rootObjects;
 
+    [SerializeField] private UnityEvent onAttackingFinished;
 
+    [Header("Corner Attack Settings")]
+    [SerializeField] private float cornerInSpeed = 50f;
+    [SerializeField] private float cornerWaitTime = 2f;
+    [SerializeField] private float cornerOutSpeed = 20f;
+    [SerializeField] private float cornerMaxExtend = 21f;
+
+    [Header("Remain Sequence Attack Settings")]
+    [SerializeField] private float sequenceRemainInSpeed = 50f;
+    [SerializeField] private float sequenceRemainWaitTime = 2f;
+    [SerializeField] private float sequenceRemainOutSpeed = 20f;
+    [SerializeField] private float sequenceRemainTimeBetweenRoots = 0.5f;
+    
+    [Header("Retract Sequence Attack Settings")]
+    [SerializeField] private float sequenceRetractInSpeed = 50f;
+    [SerializeField] private float sequenceRetractWaitTime = 0.05f;
+    [SerializeField] private float sequenceRetractOutSpeed = 25f;
+    [SerializeField] private float sequenceRetractTimeBetweenRoots = 0.3f;
+
+    [Header("Wipe Attack Settings")]
+    [SerializeField] private float wipeExtendSpeed = 40f;
+    [SerializeField] private float wipeMaxExtend = 19f;
+    [SerializeField] private float wipePostExtendWaitTime = 1f;
+    [SerializeField] private float wipeSwipeSpeed = 10f;
+    [SerializeField] private float wipePostSwipeWaitTime = 1f;
+    [SerializeField] private float wipeRetractSpeed = 20f;
+
+    private bool _isAttackingStage;
+    public bool IsAttackingStage
+    {
+        get => _isAttackingStage;
+        set => _isAttackingStage = value;
+    }
+    private int _maxAttackIndex;
+    private int _attackIndex;
+    private bool _doingAttack;
     private void Awake()
     {
         _camera = Camera.main;
@@ -18,15 +56,51 @@ public class MainAttackController : MonoBehaviour
         _attacking = false;
     }
 
-    private IEnumerator Start()
+    private void Start()
     {
-        yield return WipeAttack();
+        IsAttackingStage = true;
+        StartAttack();
     }
 
-    private void DoRandomAttack()
+    private void Update()
     {
+        if (!_isAttackingStage)
+            return;
+
+        if (!_doingAttack)
+            return;
+        
+        if (_attacking)
+            return;
+
+        if (_attackIndex >= _maxAttackIndex)
+        {
+            if (_doingAttack)
+            {
+                _doingAttack = false;
+                Debug.Log("Attacking Finished");
+                onAttackingFinished?.Invoke();
+            }
+            return;
+        }
+        
+
+        _attackIndex++;
+        DoAttack(_attackIndex);
+    }
+
+    public void StartAttack()
+    {
+        _doingAttack = true;
+        _attacking = false;
+        _maxAttackIndex = Random.Range(3, 8);
+        _attackIndex = 0;
+    }
+
+    private void DoAttack(int index)
+    {
+        StopAllCoroutines();
         _attacking = true;
-        int index = Random.Range(0, 4);
         switch (index)
         {
             case 0:
@@ -46,6 +120,17 @@ public class MainAttackController : MonoBehaviour
                 return;
         }
     }
+
+    /*
+    private IEnumerator DoAttackSequence()
+    {
+        int attackCount = Random.Range(3, 8);
+        for (int i = 0; i < attackCount; i++)
+        {
+            int index = Random.Range(0, 4);
+            yield return DoAttack(index);
+        }
+    }*/
 
     private void AttackFinished()
     {
@@ -91,18 +176,18 @@ public class MainAttackController : MonoBehaviour
         yield return new WaitForSeconds(4f);
         
         rootObjects[0].gameObject.SetActive(true);
-        float delta = Time.fixedDeltaTime * 50f;
-        for (float y = 0f; y < 21f; y += delta)
+        float delta = Time.fixedDeltaTime * cornerInSpeed;
+        for (float y = 0f; y < cornerMaxExtend; y += delta)
         {
             obj.localPosition = new Vector2(0, y);
             yield return new WaitForFixedUpdate();
         }
-        obj.localPosition = new Vector2(0, 21);
+        obj.localPosition = new Vector2(0, cornerMaxExtend);
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(cornerWaitTime);
         
-        delta = Time.fixedDeltaTime * 20f;
-        for (float y = 21f; y > 0; y -= delta)
+        delta = Time.fixedDeltaTime * cornerOutSpeed;
+        for (float y = cornerMaxExtend; y > 0; y -= delta)
         {
             obj.localPosition = new Vector2(0, y);
             yield return new WaitForFixedUpdate();
@@ -134,13 +219,18 @@ public class MainAttackController : MonoBehaviour
         yield return new WaitForSeconds(4f);
         
         float xDiff = _cameraController.TopRight.x - _cameraController.BottomLeft.x;
-        
+
+        Coroutine[] coroutines = new Coroutine[rootObjects.Length];
         for (int i = 0; i < rootObjects.Length; i++)
         {
             int index = goingUp == 0 ? i : rootObjects.Length - i - 1;
-            StartCoroutine(MoveRootOutThenIn(rootObjects[index], xDiff - 1f, 50f, 20f, 2f));
-            yield return new WaitForSeconds(0.5f);
+            coroutines[i] = StartCoroutine(MoveRootOutThenIn(rootObjects[index], xDiff - 1f, sequenceRemainInSpeed, sequenceRemainOutSpeed, sequenceRemainWaitTime));
+            yield return new WaitForSeconds(sequenceRemainTimeBetweenRoots);
         }
+
+        yield return coroutines[0];
+        yield return coroutines[1];
+        yield return coroutines[2];
 
         AttackFinished();
         yield break;
@@ -192,12 +282,17 @@ public class MainAttackController : MonoBehaviour
         
         float xDiff = _cameraController.TopRight.x - _cameraController.BottomLeft.x;
         
+        Coroutine[] coroutines = new Coroutine[rootObjects.Length];
         for (int i = 0; i < rootObjects.Length; i++)
         {
             int index = goingUp == 0 ? i : rootObjects.Length - i - 1;
-            StartCoroutine(MoveRootOutThenIn(rootObjects[index], xDiff - 1f, 50, 25, 0.05f));
+            coroutines[i] = StartCoroutine(MoveRootOutThenIn(rootObjects[index], xDiff - 1f, 50, 25, 0.05f));
             yield return new WaitForSeconds(0.3f);
         }
+        
+        yield return coroutines[0];
+        yield return coroutines[1];
+        yield return coroutines[2];
 
         AttackFinished();
         yield break;
@@ -209,9 +304,8 @@ public class MainAttackController : MonoBehaviour
         int goingRight = Random.Range(0, 2);
         
         float yPos = side == 0 ? _cameraController.BottomLeft.y : _cameraController.TopRight.y;
-        float startX = goingRight == 0 ? _cameraController.BottomLeft.x : _cameraController.TopRight.x;
-        float endX = goingRight == 0 ? _cameraController.TopRight.x : _cameraController.BottomLeft.x;
-        float xDiff = endX - startX;
+        float startX = goingRight == 0 ? _cameraController.BottomLeft.x + 2 : _cameraController.TopRight.x - 2;
+        float endX = goingRight == 0 ? _cameraController.TopRight.x - 4 : _cameraController.BottomLeft.x + 4;
         Vector2 direction = goingRight == 0 ? Vector2.right : Vector2.left;
         float angle = side == 0 ? 0 : 180;
         
@@ -223,17 +317,17 @@ public class MainAttackController : MonoBehaviour
         yield return new WaitForSeconds(4f);
         
         rootObjects[0].gameObject.SetActive(true);
-        float delta = Time.fixedDeltaTime * 40f;
-        for (float y = 0f; y < 19f; y += delta)
+        float delta = Time.fixedDeltaTime * wipeExtendSpeed;
+        for (float y = 0f; y < wipeMaxExtend; y += delta)
         {
             obj.localPosition = new Vector2(0, y);
             yield return new WaitForFixedUpdate();
         }
-        obj.localPosition = new Vector2(0, 19f);
+        obj.localPosition = new Vector2(0, wipeMaxExtend);
         
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(wipePostExtendWaitTime);
 
-        delta = Time.fixedDeltaTime * 10f;
+        delta = Time.fixedDeltaTime * wipeSwipeSpeed;
         if (goingRight == 0)
         {
             for (float x = startX; x < endX; x += delta)
@@ -252,9 +346,9 @@ public class MainAttackController : MonoBehaviour
         }
         rootObjects[0].position = new Vector2(endX, yPos);
         
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(wipePostSwipeWaitTime);
         
-        delta = Time.fixedDeltaTime * 10f;
+        delta = Time.fixedDeltaTime * wipeSwipeSpeed;
         if (goingRight == 0)
         {
             for (float x = endX; x > startX; x -= delta)
@@ -272,6 +366,18 @@ public class MainAttackController : MonoBehaviour
             }
         }
         rootObjects[0].position = new Vector2(startX, yPos);
+        
+        yield return new WaitForSeconds(wipePostExtendWaitTime);
+        
+        delta = Time.fixedDeltaTime * wipeRetractSpeed;
+        for (float y = wipeMaxExtend; y > 0; y -= delta)
+        {
+            obj.localPosition = new Vector2(0, y);
+            yield return new WaitForFixedUpdate();
+        }
+        obj.localPosition = new Vector2(0, 0);
+        rootObjects[0].gameObject.SetActive(false);
+        
 
         AttackFinished();
         yield break;

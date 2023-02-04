@@ -658,7 +658,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6445105374575693126, guid: aff2ab7a34a54e0438d5e14385e9f635, type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 6445105374575693126, guid: aff2ab7a34a54e0438d5e14385e9f635, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1202,6 +1202,39 @@ MonoBehaviour:
   - {fileID: 459897161}
   - {fileID: 673682641}
   - {fileID: 559819984}
+  onAttackingFinished:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1704102623}
+        m_TargetAssemblyTypeName: MainAttackController, Assembly-CSharp
+        m_MethodName: StartAttack
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  cornerInSpeed: 50
+  cornerWaitTime: 2
+  cornerOutSpeed: 20
+  cornerMaxExtend: 21
+  sequenceRemainInSpeed: 50
+  sequenceRemainWaitTime: 2
+  sequenceRemainOutSpeed: 20
+  sequenceRemainTimeBetweenRoots: 0.5
+  sequenceRetractInSpeed: 50
+  sequenceRetractWaitTime: 0.05
+  sequenceRetractOutSpeed: 25
+  sequenceRetractTimeBetweenRoots: 0.3
+  wipeExtendSpeed: 40
+  wipeMaxExtend: 19
+  wipePostExtendWaitTime: 1
+  wipeSwipeSpeed: 10
+  wipePostSwipeWaitTime: 1
+  wipeRetractSpeed: 20
 --- !u!4 &1704102624
 Transform:
   m_ObjectHideFlags: 0
@@ -1333,7 +1366,7 @@ Transform:
   - {fileID: 68932015}
   - {fileID: 672353715}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &9150767347552653227
 PrefabInstance:
