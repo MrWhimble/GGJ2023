@@ -15,7 +15,7 @@ public class BulletManager : MonoBehaviour
     private void Awake()
     {
         _bullets = new ObjectPool<BulletController>();
-        _bullets.Init(prefab, 10);
+        _bullets.Init(prefab, 20);
     }
 
     private void Start()
