@@ -39,10 +39,15 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 currentPos = _rigidbody.position;
         float s = _spedUp ? upgradedSpeed : speed;
-        Vector2 newPos = currentPos + (_inputDir * s * Time.fixedDeltaTime);
-        
+        Vector2 dir = (_inputDir * s * Time.fixedDeltaTime);
+        Vector2 newPos = currentPos + dir;
+        newPos = new Vector2(Mathf.Clamp(newPos.x, _cameraController.TopLeft.x, _cameraController.BottomRight.x), Mathf.Clamp(newPos.y, _cameraController.TopLeft.y, _cameraController.BottomRight.y));
+        _rigidbody.velocity = dir;
+        _rigidbody.MovePosition(newPos);
+
+
         //newPos = new Vector2(Mathf.Clamp(newPos.x, _cameraController.TopLeft.x, _cameraController.BottomRight.x), Mathf.Clamp(newPos.y, _cameraController.TopLeft.y, _cameraController.BottomRight.y));
-        
+
         //_rigidbody.MovePosition(newPos);
     }
     
