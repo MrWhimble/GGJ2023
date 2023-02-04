@@ -11,6 +11,8 @@ public class BlobShopKeeper : MonoBehaviour
     public List<startingDialogueStruct> startingDialogue;
     public List<startingDialogueStruct> Dialogue;
 
+    public GameObject playButton;
+
     [System.Serializable]
     public struct startingDialogueStruct 
     {
@@ -36,11 +38,14 @@ public class BlobShopKeeper : MonoBehaviour
         if (firstTimeTalking)
         {
             StartCoroutine(FirstTimeTalking());
+            playButton.SetActive(false);
         }
         else
         {
             StartCoroutine(Talking());
         }
+
+        
         
     }
 
@@ -53,6 +58,7 @@ public class BlobShopKeeper : MonoBehaviour
         }
 
         firstTimeTalking = false;
+        playButton.SetActive(true);
     }
 
     IEnumerator Talking() 
