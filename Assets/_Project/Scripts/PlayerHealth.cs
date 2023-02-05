@@ -1,5 +1,7 @@
 ﻿using System;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.Events;
 
 public class PlayerHealth : MonoBehaviour
@@ -29,5 +31,15 @@ public class PlayerHealth : MonoBehaviour
             _dead = true;
             onDeath?.Invoke();
         }
+
+        StartCoroutine(TookDamage());
+    }
+
+    IEnumerator TookDamage()
+    {
+        gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.red;
+        yield return new WaitForSeconds(.5f);
+        gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.white;
     }
 }
+
