@@ -35,7 +35,9 @@ public class BlobShopKeeper : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (firstTimeTalking)
+        int firstTime = PlayerPrefs.GetInt("firstTime");
+
+        if (firstTimeTalking && firstTime != 1)
         {
             StartCoroutine(FirstTimeTalking());
             playButton.SetActive(false);
@@ -57,6 +59,7 @@ public class BlobShopKeeper : MonoBehaviour
             yield return new WaitForSeconds(startingDialogue[i].timeBetweenSentences);
         }
 
+        PlayerPrefs.SetInt("firstTime", 1);
         firstTimeTalking = false;
         playButton.SetActive(true);
     }
@@ -69,6 +72,11 @@ public class BlobShopKeeper : MonoBehaviour
         yield return new WaitForSeconds(startingDialogue[randomSentence].timeBetweenSentences);
         blobDialogue.text = "";
 
+    }
+
+    public void ClearPlayerPrefs() 
+    {
+        PlayerPrefs.DeleteAll();
     }
 
 }
