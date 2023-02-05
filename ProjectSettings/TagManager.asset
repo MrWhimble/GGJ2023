@@ -11,12 +11,12 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - EnemyRoot
+  - EnemyProjectile
+  - Enemy
+  - PlayerProjectile
+  - Upgrade
   - 
   - 
   - 
