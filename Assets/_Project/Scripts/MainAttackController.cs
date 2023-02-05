@@ -14,25 +14,29 @@ public class MainAttackController : MonoBehaviour
 
     [SerializeField] private UnityEvent onAttackingFinished;
 
-    [Header("Corner Attack Settings")]
+    [Header("Corner Attack Settings")] 
+    [SerializeField] private float cornerTimeBeforeAttack = 4f;
     [SerializeField] private float cornerInSpeed = 50f;
     [SerializeField] private float cornerWaitTime = 2f;
     [SerializeField] private float cornerOutSpeed = 20f;
     [SerializeField] private float cornerMaxExtend = 21f;
 
     [Header("Remain Sequence Attack Settings")]
+    [SerializeField] private float sequenceRemainTimeBeforeAttack = 4f;
     [SerializeField] private float sequenceRemainInSpeed = 50f;
     [SerializeField] private float sequenceRemainWaitTime = 2f;
     [SerializeField] private float sequenceRemainOutSpeed = 20f;
     [SerializeField] private float sequenceRemainTimeBetweenRoots = 0.5f;
     
     [Header("Retract Sequence Attack Settings")]
+    [SerializeField] private float sequenceRetractTimeBeforeAttack = 4f;
     [SerializeField] private float sequenceRetractInSpeed = 50f;
     [SerializeField] private float sequenceRetractWaitTime = 0.05f;
     [SerializeField] private float sequenceRetractOutSpeed = 25f;
     [SerializeField] private float sequenceRetractTimeBetweenRoots = 0.3f;
 
     [Header("Wipe Attack Settings")]
+    [SerializeField] private float wipeTimeBeforeAttack = 4f;
     [SerializeField] private float wipeExtendSpeed = 40f;
     [SerializeField] private float wipeMaxExtend = 19f;
     [SerializeField] private float wipePostExtendWaitTime = 1f;
@@ -54,12 +58,6 @@ public class MainAttackController : MonoBehaviour
         _camera = Camera.main;
         _cameraController = _camera.GetComponent<CameraController>();
         _attacking = false;
-    }
-
-    private void Start()
-    {
-        IsAttackingStage = true;
-        StartAttack();
     }
 
     private void Update()
@@ -86,7 +84,7 @@ public class MainAttackController : MonoBehaviour
         
 
         _attackIndex++;
-        DoAttack(_attackIndex);
+        DoAttack(Random.Range(0, 4));
     }
 
     public void StartAttack()
@@ -173,9 +171,11 @@ public class MainAttackController : MonoBehaviour
         Transform obj = rootObjects[0].GetChild(0);
         obj.localPosition = Vector3.zero;
 
-        yield return new WaitForSeconds(4f);
+        rootObjects[0].GetChild(1).gameObject.SetActive(true);
+        yield return new WaitForSeconds(cornerTimeBeforeAttack);
+        rootObjects[0].GetChild(1).gameObject.SetActive(false);
         
-        rootObjects[0].gameObject.SetActive(true);
+        obj.gameObject.SetActive(true);
         float delta = Time.fixedDeltaTime * cornerInSpeed;
         for (float y = 0f; y < cornerMaxExtend; y += delta)
         {
@@ -193,7 +193,7 @@ public class MainAttackController : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
         obj.localPosition = new Vector2(0, 0);
-        rootObjects[0].gameObject.SetActive(false);
+        obj.gameObject.SetActive(false);
         
         AttackFinished();
         yield break;
@@ -216,7 +216,11 @@ public class MainAttackController : MonoBehaviour
             rootObjects[i].rotation = Quaternion.Euler(0, 0, angle);
         }
 
-        yield return new WaitForSeconds(4f);
+        for (int i = 0; i < rootObjects.Length; i++)
+            rootObjects[i].GetChild(1).gameObject.SetActive(true);
+        yield return new WaitForSeconds(sequenceRemainTimeBeforeAttack);
+        for (int i = 0; i < rootObjects.Length; i++)
+            rootObjects[i].GetChild(1).gameObject.SetActive(false);
         
         float xDiff = _cameraController.TopRight.x - _cameraController.BottomLeft.x;
 
@@ -240,7 +244,7 @@ public class MainAttackController : MonoBehaviour
     {
         Transform obj = root.GetChild(0);
         obj.localPosition = Vector3.zero;
-        root.gameObject.SetActive(true);
+        obj.gameObject.SetActive(true);
         float delta = Time.fixedDeltaTime * moveOutSpeed;
         for (float y = 0f; y < distance; y += delta)
         {
@@ -258,7 +262,7 @@ public class MainAttackController : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
         obj.localPosition = new Vector2(0, 0);
-        root.gameObject.SetActive(false);
+        obj.gameObject.SetActive(false);
     }
 
     private IEnumerator SequenceRetractAttack()
@@ -278,7 +282,11 @@ public class MainAttackController : MonoBehaviour
             rootObjects[i].rotation = Quaternion.Euler(0, 0, angle);
         }
 
-        yield return new WaitForSeconds(4f);
+        for (int i = 0; i < rootObjects.Length; i++)
+            rootObjects[i].GetChild(1).gameObject.SetActive(true);
+        yield return new WaitForSeconds(sequenceRetractTimeBeforeAttack);
+        for (int i = 0; i < rootObjects.Length; i++)
+            rootObjects[i].GetChild(1).gameObject.SetActive(false);
         
         float xDiff = _cameraController.TopRight.x - _cameraController.BottomLeft.x;
         
@@ -304,8 +312,8 @@ public class MainAttackController : MonoBehaviour
         int goingRight = Random.Range(0, 2);
         
         float yPos = side == 0 ? _cameraController.BottomLeft.y : _cameraController.TopRight.y;
-        float startX = goingRight == 0 ? _cameraController.BottomLeft.x + 2 : _cameraController.TopRight.x - 2;
-        float endX = goingRight == 0 ? _cameraController.TopRight.x - 4 : _cameraController.BottomLeft.x + 4;
+        float startX = goingRight == 0 ? _cameraController.BottomLeft.x + 1.5f : _cameraController.TopRight.x - 1.5f;
+        float endX = goingRight == 0 ? _cameraController.TopRight.x - 3.5f : _cameraController.BottomLeft.x + 3.5f;
         Vector2 direction = goingRight == 0 ? Vector2.right : Vector2.left;
         float angle = side == 0 ? 0 : 180;
         
@@ -314,9 +322,11 @@ public class MainAttackController : MonoBehaviour
         Transform obj = rootObjects[0].GetChild(0);
         obj.localPosition = Vector3.zero;
         
-        yield return new WaitForSeconds(4f);
+        rootObjects[0].GetChild(1).gameObject.SetActive(true);
+        yield return new WaitForSeconds(wipeTimeBeforeAttack);
+        rootObjects[0].GetChild(1).gameObject.SetActive(false);
         
-        rootObjects[0].gameObject.SetActive(true);
+        obj.gameObject.SetActive(true);
         float delta = Time.fixedDeltaTime * wipeExtendSpeed;
         for (float y = 0f; y < wipeMaxExtend; y += delta)
         {
@@ -376,7 +386,7 @@ public class MainAttackController : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
         obj.localPosition = new Vector2(0, 0);
-        rootObjects[0].gameObject.SetActive(false);
+        obj.gameObject.SetActive(false);
         
 
         AttackFinished();

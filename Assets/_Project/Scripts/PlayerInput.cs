@@ -1,5 +1,4 @@
 ﻿using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public enum InputTypes
@@ -26,6 +25,14 @@ public class PlayerInput : MonoBehaviour
     private int _touchId;
     private bool _following;
     private Vector2 _followPos;
+
+    private bool _isInDefenceMode;
+
+    public bool IsInDefenceMode
+    {
+        get => _isInDefenceMode;
+        set => _isInDefenceMode = value;
+    }
     
     private void Awake()
     {
@@ -70,8 +77,8 @@ public class PlayerInput : MonoBehaviour
 
     public static bool IsShooting()
     {
-        bool isInDefenceMode = false;
-        if (isInDefenceMode)
+        
+        if (_instance._isInDefenceMode)
             return false;
         
         switch (_instance.inputType)
