@@ -81,6 +81,8 @@ public class BossAttackController : MonoBehaviour
 
     private IEnumerator ShankAttack()
     {
+        yield return new WaitForSeconds(shankWaitTimeToAttack);
+        
         float localYMin = _cameraController.TopRight.x;
         float localYMax = _cameraController.BottomLeft.x;
         float localYDiff = localYMax - localYMin;
@@ -91,7 +93,7 @@ public class BossAttackController : MonoBehaviour
 
         root.localPosition = new Vector2(localXPos, localYMin + localYLaneDelta * (lane + 1));
         
-        yield return new WaitForSeconds(shankWaitTimeToAttack);
+        
 
         Transform obj = root.GetChild(0);
         obj.gameObject.SetActive(true);
