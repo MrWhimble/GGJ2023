@@ -643,6 +643,7 @@ MonoBehaviour:
     timeBetweenSentences: 5
   - dialogueText: Oh boy am I glad to see you!
     timeBetweenSentences: 5
+  playButton: {fileID: 1594499773}
 --- !u!1 &623798777
 GameObject:
   m_ObjectHideFlags: 0
