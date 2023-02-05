@@ -54,7 +54,7 @@ public class DefenceModeController : MonoBehaviour
         roots.localPosition = new Vector2(0, endY);
     }
 
-    private IEnumerator LowerRoots()
+    public IEnumerator LowerRoots()
     {
         float yPos = endY;
         while (yPos > startY + 0.01f)

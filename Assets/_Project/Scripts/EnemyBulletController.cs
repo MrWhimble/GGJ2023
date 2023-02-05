@@ -3,9 +3,14 @@
 public class EnemyBulletController : PooledBehaviour
 {
     [SerializeField] private float damageValue = 1;
-    private Rigidbody _rigidbody;
+    private Rigidbody2D _rigidbody;
     private float _startTime;
     private float _lifeTime;
+    
+    private void Awake()
+    {
+        _rigidbody = GetComponent<Rigidbody2D>();
+    }
     
     public override void Spawn()
     {

@@ -25,6 +25,9 @@ public class PlayerHealth : MonoBehaviour
 
     public void Damage(float value)
     {
+        if (_dead)
+            return;
+        
         _health -= value;
         if (_health <= 0)
         {
