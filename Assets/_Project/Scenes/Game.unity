@@ -1534,7 +1534,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputType: 2
-  useMouseAsFollow: 0
+  useMouseAsFollow: 1
   followOffset: {x: 0, y: 2}
 --- !u!4 &1000236228
 Transform:
@@ -2516,6 +2516,14 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1315477603}
+    - target: {fileID: 3238333261168088774, guid: d194803912c050340814eebcf9b27215, type: 3}
+      propertyPath: bulletSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3238333261168088774, guid: d194803912c050340814eebcf9b27215, type: 3}
+      propertyPath: bulletBulletsPerBurst
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3238333261168088775, guid: d194803912c050340814eebcf9b27215, type: 3}
       propertyPath: timeBetweenSounds
       value: 0.75
@@ -2708,6 +2716,14 @@ PrefabInstance:
     - target: {fileID: 9150767346585311177, guid: 644d5b14028009c4eb554f00aa22cd87, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150767346585311183, guid: 644d5b14028009c4eb554f00aa22cd87, type: 3}
+      propertyPath: speed
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150767346585311183, guid: 644d5b14028009c4eb554f00aa22cd87, type: 3}
+      propertyPath: slowSpeed
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 644d5b14028009c4eb554f00aa22cd87, type: 3}
