@@ -176,6 +176,7 @@ public class MainAttackController : MonoBehaviour
         rootObjects[0].GetChild(1).gameObject.SetActive(false);
         
         obj.gameObject.SetActive(true);
+        rootObjects[0].GetComponent<AudioSource>().Play();
         float delta = Time.fixedDeltaTime * cornerInSpeed;
         for (float y = 0f; y < cornerMaxExtend; y += delta)
         {
@@ -245,6 +246,7 @@ public class MainAttackController : MonoBehaviour
         Transform obj = root.GetChild(0);
         obj.localPosition = Vector3.zero;
         obj.gameObject.SetActive(true);
+        root.GetComponent<AudioSource>().Play();
         float delta = Time.fixedDeltaTime * moveOutSpeed;
         for (float y = 0f; y < distance; y += delta)
         {
@@ -326,6 +328,7 @@ public class MainAttackController : MonoBehaviour
         yield return new WaitForSeconds(wipeTimeBeforeAttack);
         rootObjects[0].GetChild(1).gameObject.SetActive(false);
         
+        rootObjects[0].GetComponent<AudioSource>().Play();
         obj.gameObject.SetActive(true);
         float delta = Time.fixedDeltaTime * wipeExtendSpeed;
         for (float y = 0f; y < wipeMaxExtend; y += delta)

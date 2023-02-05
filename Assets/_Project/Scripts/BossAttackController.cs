@@ -98,6 +98,7 @@ public class BossAttackController : MonoBehaviour
         Transform obj = root.GetChild(0);
         obj.gameObject.SetActive(true);
         float delta = Time.fixedDeltaTime * shankExtendSpeed;
+        root.GetComponent<AudioSource>().Play();
         for (float x = 0f; x < shankExtendDistance; x += delta)
         {
             obj.localPosition = new Vector2(-x, 0);

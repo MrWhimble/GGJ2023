@@ -13,9 +13,12 @@ public class PlayerHealth : MonoBehaviour
 
     [SerializeField] private UnityEvent onDeath;
 
+    [SerializeField] private AudioSource audioSource;
+
     private void Awake()
     {
         _health = maxHealth;
+        audioSource.playOnAwake = false;
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -27,6 +30,8 @@ public class PlayerHealth : MonoBehaviour
     {
         if (_dead)
             return;
+
+        audioSource.Play();
         
         _health -= value;
         if (_health <= 0)

@@ -7,6 +7,11 @@ public class BulletManager : MonoBehaviour
     
     [SerializeField] private BulletController prefab;
     [SerializeField] private Transform origin;
+
+    [SerializeField] private AudioClip[] clips;
+    [SerializeField] private int playSoundEveryNShots;
+    private AudioSource _audioSource;
+    private int _shotCount;
     
     private ObjectPool<BulletController> _bullets;
 
@@ -16,6 +21,9 @@ public class BulletManager : MonoBehaviour
     {
         _bullets = new ObjectPool<BulletController>();
         _bullets.Init(prefab, 20);
+        _audioSource = GetComponent<AudioSource>();
+        _audioSource.playOnAwake = false;
+        _shotCount = 0;
     }
 
     private void Start()
@@ -40,5 +48,17 @@ public class BulletManager : MonoBehaviour
             bc.Init(data, i, origin.position);
         }
         _lastShotTime = Time.time;
+
+        if (_shotCount % playSoundEveryNShots == 0)
+        {
+            PlaySound();
+        }
+        _shotCount++;
+    }
+
+    private void PlaySound()
+    {
+        _audioSource.clip = clips[Random.Range(0, clips.Length)];
+        _audioSource.Play();
     }
 }
