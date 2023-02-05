@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private PlayerInput playerInput;
     [SerializeField] private MainAttackController mainAttackController;
     [SerializeField] private DefenceModeController defenceModeController;
+
+    [SerializeField] private UnityEvent onPlayerDeath;
+    
 
     private void Start()
     {
@@ -23,6 +27,11 @@ public class GameManager : MonoBehaviour
         playerInput.IsInDefenceMode = false;
         mainAttackController.IsAttackingStage = false;
         defenceModeController.StartDefence();
+    }
+
+    public void PlayerDead()
+    {
+        onPlayerDeath?.Invoke();
     }
 
     public void BossTime()
