@@ -6,8 +6,8 @@ public class BulletController : PooledBehaviour
     [SerializeField] private float damageValue;
     
     private Rigidbody2D _rigidbody;
-    private Transform child;
-    private SpriteRenderer spriteRenderer;
+    private Transform _child;
+    private SpriteRenderer _spriteRenderer;
     private BoxCollider2D _boxCollider;
     private float _startTime;
     private float _lifeTime;
@@ -16,8 +16,8 @@ public class BulletController : PooledBehaviour
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _boxCollider = GetComponent<BoxCollider2D>();
-        child = transform.GetChild(0);
-        spriteRenderer = child.GetComponent<SpriteRenderer>();
+        _child = transform.GetChild(0);
+        _spriteRenderer = _child.GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -45,8 +45,8 @@ public class BulletController : PooledBehaviour
         transform.SetPositionAndRotation(origin + data.directions[bulletIndex].position, Quaternion.Euler(0, 0, data.directions[bulletIndex].angle));
         _rigidbody.velocity = transform.up * data.speed;
         _lifeTime = data.lifeTime;
-        child.localScale = new Vector3(data.size.x, data.size.y, 1);
-        spriteRenderer.sprite = data.sprite;
+        _child.localScale = new Vector3(data.size.x, data.size.y, 1);
+        _spriteRenderer.sprite = data.sprite;
         _boxCollider.size = data.size / 2f;
     }
 
